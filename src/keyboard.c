@@ -153,6 +153,11 @@ void print_letter(uint8_t scancode) {
           printChar('\n'); // <-- mozno toto bude better ale nechce mi zase fungovat ./makeNrun.sh vo WSL
 //          parsedShell();
           //printString("SHELL> ");
+          printChar('S');
+          printChar('H');
+          printChar('E');
+          printChar('L');
+          printChar('L');
           for(int x = 0; x < MAX_SIZE; x++) keybuffer[x] = 0;
           keybuff_pointer = 0;
           break;
