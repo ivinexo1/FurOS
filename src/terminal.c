@@ -1,5 +1,4 @@
 #include "../include/vga.h"
-//#include "../include/keyboard.h"
 #include "../include/terminal.h"
 #include <stdint.h>
 
