@@ -16,8 +16,11 @@ void main() {
     }
   }
 //  putChar(0, 0, 0xff00ff, 0x0000ff, 'a');
-  printChar('a');
-  printChar('b');
+  printChar('S');
+  printChar('H');
+  printChar('E');
+  printChar('L');
+  printChar('L');
   init_keyboard();
 //  asm volatile("int $31");
 //  int x = 1/0;

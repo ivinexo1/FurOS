@@ -52,6 +52,7 @@ int putChar(uint32_t x, uint32_t y, uint32_t fgcolor, uint32_t bgcolor, uint8_t 
   return 0;
 }
 
+
 /*
 
 /*size_t terminal_row;
