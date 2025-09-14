@@ -27,7 +27,7 @@ int printChar(uint8_t letter){
     putChar(current_X * 40, current_Y * 40, fgcolor, bgcolor, letter);
     current_X++;
   }
-  if (current_Y > 18) {
+  if (current_Y >= 18 && current_X > 24) {
     for (int i = 0; i < 25; i++) {
       for (int j = 0; j < 19; j++) {
         if (j < 18) {
