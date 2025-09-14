@@ -1,4 +1,5 @@
 #include "../include/vga.h"
+#include "../include/terminal.h"
 #include "../include/idt.h"
 #include "../include/isr.h"
 #include "../include/ports.h"
@@ -134,7 +135,9 @@ void isr_handler(registers_t *r){
         printPixel(i, 0, 0x000000);
     }
   }
-//  printString(exeption_msg[r->int_no]);
+
+  resetTerminal();
+  printString(exeption_msg[r->int_no]);
   asm volatile("hlt");
 }
 

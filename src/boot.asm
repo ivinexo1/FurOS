@@ -8,22 +8,50 @@ mov ds, ax
 mov bp, 0x7000
 mov sp, bp 
 
+mov eax, 0x2000
+mov es, eax
+mov di, 0
+
+mov eax, 0xe820
+mov ebx, 0
+mov ecx, 24
+mov edx, 0x534d4150
+int 0x15
+jc error
+
+mov ecx, 10
+scanRAM:
+push ecx
+add di, 24
+mov eax, 0xe820
+mov ecx, 24
+int 0x15
+jc error
+pop ecx
+loop scanRAM
+
+
+mov ah, 0x0
+int 0x16
+
 ;loading second stage of bootloander
+xor ax, ax
+mov es, ax
 mov bx, 0x7e00
 
 mov ah, 2
-mov al, 1
+mov al, 2
 mov ch, 0
 mov dh, 0
-mov cl, 1
+mov cl, 2
 mov dl, [BOOT_DISK]
 int 0x13
 jc error
 
 ;loading the kernel
 push 0x0000
-push 0x1000
-push 2
+push 0x3000
+push 3
 mov cx, 650
 loadloop:
 push cx
@@ -71,7 +99,6 @@ add word [bp - 4], 0x1000
 pop cx
 loop loadloop
 .endaddtooffest:
-
 
 
 xor ax, ax
@@ -162,6 +189,94 @@ ret
                                    
 BOOT_DISK:
 db 0                                    
+
+
+ 
+times 510-($-$$) db 0              
+dw 0xaa55
+[bits 32]
+start_protected_mode:
+;jmp $
+mov ax, DATA_SEG
+mov ds, ax
+mov ss, ax
+mov es, ax
+mov fs, ax
+mov gs, ax
+mov ebp, 0xffff
+mov esp, ebp
+
+
+mov dword [0x10000], 0x11000
+or dword [0x10000], 3
+
+mov dword [0x1101c], 0x7000
+or dword [0x1101c], 3
+
+mov dword [0x11020], 0x8000
+or dword [0x11020], 3
+
+mov dword [0x1103c], 0xf000
+or dword [0x1103c], 3
+
+mov dword [0x11000], 0x10000
+or dword [0x11000], 3
+
+mov dword [0x11004], 0x11000
+or dword [0x11004], 3
+
+mov ecx, 52
+mov eax, 0
+mov ebx, 0x30000
+kernelPageLoop:
+mov dword [0x110c0 + eax], ebx
+or dword [0x110c0 + eax], 3
+add ebx, 0x1000
+add eax, 4
+loop kernelPageLoop
+
+mov ecx, 576
+mov eax, 0
+mov ebx, [VesaModeInfoBlock.LFBAddress]
+framePageLoop:
+mov dword [0x11190 + eax], ebx
+or dword [0x11190 + eax], 3
+add ebx, 0x1000
+add eax, 4
+loop framePageLoop
+
+
+mov eax, [VesaModeInfoBlock.LFBAddress]
+mov dword [0x11190], eax
+or dword [0x11190], 3
+
+mov eax, 0x10000
+mov cr3, eax
+
+mov eax, cr0
+or eax, 0x80000000
+mov cr0, eax
+
+mov ecx, 0xfff
+Testloop:
+;mov byte [ecx], 0xff
+loop Testloop
+
+mov eax, [VesaModeInfoBlock.BitsPerPixel]
+and eax, 0x000000ff
+xor edx, edx
+mov ebx, 8
+div ebx
+push eax
+mov eax, [VesaModeInfoBlock.BytesPerScanLine]
+and eax, 0x0000ffff
+push eax
+;mov eax, [VesaModeInfoBlock.LFBAddress]
+;push eax
+;jmp $
+jmp 0x30000
+times 512-(($-$$)-512) db 0
+
 GDT_start:                          ; must be at the end of real mode code
     GDT_null:
         dd 0x0
@@ -190,35 +305,6 @@ GDT_descriptor:
     dd GDT_start
 
 
-[bits 32]
-start_protected_mode:
-mov ax, DATA_SEG
-mov ds, ax
-mov ss, ax
-mov es, ax
-mov fs, ax
-mov gs, ax
-mov ebp, 0x7000
-mov esp, ebp
-;send info about vesa mode to kernel
-mov eax, [VesaModeInfoBlock.BitsPerPixel]
-and eax, 0x000000ff
-xor edx, edx
-mov ebx, 8
-div ebx
-push eax
-mov eax, [VesaModeInfoBlock.BytesPerScanLine]
-and eax, 0x0000ffff
-push eax
-mov eax, [VesaModeInfoBlock.LFBAddress]
-push eax
-
-;jump to kernel_entry
-jmp 0x10000
-
- 
-times 510-($-$$) db 0              
-dw 0xaa55
 
 VesaModeInfoBlock:				;	VesaModeInfoBlock_size = 256 bytes
 	.ModeAttributes		resw 1
@@ -259,4 +345,4 @@ VesaModeInfoBlock:				;	VesaModeInfoBlock_size = 256 bytes
 	.OffscreenMemoryOffset	resd 1
 	.OffscreenMemorySize	resw 1		;	in KB
 	.Reserved2		resb 206	;	available in Revision 3.0, but useless for now
-times 256 db 0
+times 512-(($-$$)-1024) db 0
