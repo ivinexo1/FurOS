@@ -4,6 +4,7 @@
 #include "../include/ports.h"
 #include "../include/idt.h"
 #include "../include/isr.h"
+#include "../include/acpi.h"
 #include "../include/terminal.h"
 #include "../include/keyboard.h"
 
@@ -31,8 +32,8 @@ void main() {
     }
   }
 //  putChar(0, 0, 0xff00ff, 0x0000ff, 'a');
-  printString("SHELL ");
-  printNum(0x20000);
+//  printString("SHELL ");
+  initAcpi();
   init_keyboard();
 //  asm volatile("int $31");
 //  int x = 1/0;

@@ -6,7 +6,8 @@
 #include <stddef.h>
 #include <stdbool.h>
 
-static const uint32_t framebuffer = 0x64000;
+//static const uint32_t framebuffer = 0x64000;
+extern uint32_t framebuffer;
 extern uint32_t bbp;
 extern uint32_t bbl;
 

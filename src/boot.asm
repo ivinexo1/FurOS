@@ -8,28 +8,66 @@ mov ds, ax
 mov bp, 0x7000
 mov sp, bp 
 
-mov eax, 0x2000
-mov es, eax
-mov di, 0
+mov ah, 0
+mov al, 0x3
+int 0x10
 
-mov eax, 0xe820
-mov ebx, 0
-mov ecx, 24
-mov edx, 0x534d4150
-int 0x15
-jc error
+;mov eax, 0x2000
+;mov es, eax
+;mov di, 0
+;
+;mov eax, 0xe820
+;mov ebx, 0
+;mov ecx, 24
+;mov edx, 0x534d4150
+;int 0x15
+;jc error
+;
+;mov ecx, 20
+;scanRAM:
+;push ecx
+;add di, 24
+;mov eax, 0xe820
+;mov ecx, 24
+;int 0x15
+;jc error
+;pop ecx
+;loop scanRAM
+;
+;
+;
+;mov ax, 0x2000
+;mov es, ax
+;xor bx, bx
+;mov cx, 80
+;ReadLoop:
+;push cx
+;push bx
+;push bp
+;mov bp, sp
+;push word [es:bx]
+;sub sp, 2
+;call hexdump
+;mov sp, bp
+;pop bp
+;pop bx
+;add bx, 2
+;xor dx, dx
+;mov ax, bx
+;mov cx, 4
+;div cx
+;cmp dx, 0
+;je .space
+;.ret:
+;pop cx
+;loop ReadLoop
+;jmp $
 
-mov ecx, 10
-scanRAM:
-push ecx
-add di, 24
-mov eax, 0xe820
-mov ecx, 24
-int 0x15
-jc error
-pop ecx
-loop scanRAM
-
+;.space:
+;mov ah, 0xe
+;mov al, ' '
+;int 0x10
+;jmp .ret
 
 mov ah, 0x0
 int 0x16
@@ -186,11 +224,33 @@ mov word [bp - 10], ax
 and word [bp - 10], 0x0f
 ret
 
-                                   
+
+hexdump:
+mov cx, 4
+.loop:
+xor dx, dx
+mov ax, [bp - 2]
+mov bx, 0x10
+div bx
+mov [bp - 2], ax
+mov ax, dx
+cmp al, 0xa
+jl .num
+add al, 0x57
+jmp .exit
+.num:
+add al, '0'
+.exit:
+mov ah, 0xe
+int 0x10
+loop .loop
+ret
+
+rsdpID:
+db 'RSD PTR '
+
 BOOT_DISK:
 db 0                                    
-
-
  
 times 510-($-$$) db 0              
 dw 0xaa55
@@ -207,61 +267,6 @@ mov ebp, 0xffff
 mov esp, ebp
 
 
-mov dword [0x10000], 0x11000
-or dword [0x10000], 3
-
-mov dword [0x1101c], 0x7000
-or dword [0x1101c], 3
-
-mov dword [0x11020], 0x8000
-or dword [0x11020], 3
-
-mov dword [0x1103c], 0xf000
-or dword [0x1103c], 3
-
-mov dword [0x11000], 0x10000
-or dword [0x11000], 3
-
-mov dword [0x11004], 0x11000
-or dword [0x11004], 3
-
-mov ecx, 52
-mov eax, 0
-mov ebx, 0x30000
-kernelPageLoop:
-mov dword [0x110c0 + eax], ebx
-or dword [0x110c0 + eax], 3
-add ebx, 0x1000
-add eax, 4
-loop kernelPageLoop
-
-mov ecx, 576
-mov eax, 0
-mov ebx, [VesaModeInfoBlock.LFBAddress]
-framePageLoop:
-mov dword [0x11190 + eax], ebx
-or dword [0x11190 + eax], 3
-add ebx, 0x1000
-add eax, 4
-loop framePageLoop
-
-
-mov eax, [VesaModeInfoBlock.LFBAddress]
-mov dword [0x11190], eax
-or dword [0x11190], 3
-
-mov eax, 0x10000
-mov cr3, eax
-
-mov eax, cr0
-or eax, 0x80000000
-mov cr0, eax
-
-mov ecx, 0xfff
-Testloop:
-;mov byte [ecx], 0xff
-loop Testloop
-
 mov eax, [VesaModeInfoBlock.BitsPerPixel]
 and eax, 0x000000ff
 xor edx, edx
@@ -271,9 +276,8 @@ push eax
 mov eax, [VesaModeInfoBlock.BytesPerScanLine]
 and eax, 0x0000ffff
 push eax
-;mov eax, [VesaModeInfoBlock.LFBAddress]
-;push eax
-;jmp $
+mov eax, [VesaModeInfoBlock.LFBAddress]
+push eax
 jmp 0x30000
 times 512-(($-$$)-512) db 0
 
