@@ -7,64 +7,79 @@
 
 <div align="center" dir="auto">
   <img src="https://github.com/user-attachments/assets/c319f234-fbf6-473a-9af1-dc54adec1504"></img>
+  Open-source OS made from scratch
 </div>
 
-Open-source OS made from scratch.
+<div align="center" dir="auto">
+  <img width="640" height="360" alt="image" src="https://github.com/user-attachments/assets/072e0721-a3fa-4b5e-a628-1a60e1012763" />
+</div>
 
-## How to setup
+# How to setup!!
 
-~ Tutorial for Linux users
-1. Clone the repository `git clone "https://github.com/ivinexo1/killmeOS/"`
-2. Install qemu:\
-For debian: `apt-get install qemu-system`\
-For arch: `pacman -S qemu-full`\
-Or build it yourself:
+This guide contains tutorials for both Linux and Windows 11
+
+## Linux 🐧
+
+1. Clone repository
+```bash
+git clone "https://github.com/ivinexo1/killmeOS/"
 ```
+2. Install QEMU (for Debian : ```apt-get install qemu-system```, Arch: ```pacman -S qemu-full```) or build it yourself
+```bash
 wget https://download.qemu.org/qemu-10.0.2.tar.xz
 tar xvJf qemu-10.0.2.tar.xz
 cd qemu-10.0.2
 ./configure
 make
 ```
-3. Install nasm:\
-For debian: `apt-get install nasm`\
-For arch: `pacman -S nasm`\
-Or for your distro\
-4. Install i386-elf-gcc\
-For arch: `yay i386-elf-gcc` or `paru i368-elf-gcc`\
-For debian: will add later but there shoud be resources on the web
-5. ~Be happy to not use Windows :>~
+3. Install NASM (for Debian: ```apt-get install nasm```, Arch: ```pacman -S nasm```)
+5. Install i386-elf-gcc (for Debian: add this later, Arch: ```yay i386-elf-gcc``` or ```paru i368-elf-gcc```)
+6. Navigate to the repository and run ```./makeNrun.sh```
 
-~ Tutorial for Windows 10/11 users :pp
-1. Clone the repository `git clone "https://github.com/ivinexo1/killmeOS/"`
+## Windows 11 🪟
+1. Clone repository
+```shell
+git clone "https://github.com/ivinexo1/killmeOS/"
+```
 2. Install [QEMU](https://download.qemu.org/)
-3. Open Powershell as admin
-4. `winget install nasm -i`
-8. Go to where you installed QEMU and add that as an environment path (for example: `C:\Program Files\qemu\`)
-9. Go to powershell and `wsl --install`
-10. `wsl -l -o` to check distros
-11. Then install Arch Linux `wsl --install -d archlinux` (name might be different but it's archlinux for me)
-12. Now you might need to setup stuff like user so you can do specific commands
-13. Install nano (or any other text editor) `sudo pacman -S nano`
-14. Then inside Arch Linux `sudo pacman -S --needed git base-devel`
-15. `git clone https://aur.archlinux.org/yay.git`
-16. `cd yay`
-17. `makepkg -si` (make sure you're not in the root but using some user)
-18. Go to `sudo nano /etc/locale.gen` (nano or any other text editor)
-19. And uncomment `#en_US.UTF-8 UTF-8` to `en_US.UTF-8 UTF-8`, then save
-20. `sudo locale-gen`
-21. Before installing i386-elf-gcc make sure you have ENOUGH MEMORY!! It finally worked for me when I set it to 6gb
-22. Check available filesize `df -h`, memory can be changed here `"C:\Users\[your name]\.wslconfig"`
-23. And tmpfs file max storage by using `sudo mount -o remount,size=6G /tmp` (this will get reset next reboot)
-24. Before you install i386-elf-gcc just know that WSL is going to be using like 90% of your CPU
-25. `yay i386-elf-gcc` and enter 1 (for the other options just press enter)
-26. Now wait until you download i386-elf-gcc (this might take somewhere between 40 minutes to 3 hours)
-27. After it's installed you can check by `i386-elf-gcc -v`
-28. If it's installed correctly navigate to the dir of killmeOS build `cd '/mnt/c/Users/[your name]/Documents/GitHub/killmeOS/build'` and execute `./makeNrun.sh`
-29. Find where you have installed nasm (for example: `C:\Program Files\NASM`) and open the `nasmpath.bat` file
-30. Then go back to the QEMU folder and find a file called `qemu-system-x86_64.exe`, then copy as path
-32. Now back in `nasmpath.bat` enter `cd C:\Users\[your name]\Documents\GitHub\killmeOS\build`
-33. `"C:\Program Files\qemu\qemu-system-x86_64.exe" -drive format=raw,file="OS.bin",index=0,if=floppy -m 128M`
-34. If you've done everything correctly you should now see a QEMU instance running killmeOS :DD
-![Screenshot 2025-06-15 190038](https://github.com/user-attachments/assets/cbbee6d2-4410-4dd4-8474-acefd387434d)
-![IMG_6205](https://github.com/user-attachments/assets/aab3c12b-c0aa-4c2e-b08b-06011d0b5e78)
+3. Install NASM
+```shell
+winget install nasm -i
+```
+4. Add QEMU as an env path
+5. Install WSL ```wsl --install```, check for available distros ```wsl -l -o```
+6. Install archlinux (optional, but that's what this tutorial is focusing on) ```wsl --install -d archlinux```
+7. Install a text editor (doesn't matter which) ```sudo pacman -S nano```
+```
+sudo pacman -S --needed git base-devel
+```
+8. Install yay
+```
+git clone https://aur.archlinux.org/yay.git
+cd yay
+```
+9. (Just make sure you're not in root but some user)
+```
+makepkg -si
+```
+10. Go to ```sudo nano /etc/locale.gen``` and uncomment ```#en_US.UTF-8 UTF-8``` (remove #)
+11. ```sudo locale-gen```
+12. Before installing i386-elf-gcc make sure you have ENOUGH MEMORY!! It finally worked for me when I set it to 6gb
+13. Check available filesize ```df -h```, memory can be changed here ```C:\Users\[your name]\.wslconfig```
+```
+sudo mount -o remount,size=6G /tmp
+```
+14. Before you install i386-elf-gcc just know that WSL is going to be using like 90% of your CPU
+15. ```yay i386-elf-gcc``` and enter 1 (for the other options just press enter)
+16. Once it's done check ```i386-elf-gcc -v```
+17. If it's installed navigate to killmeOS (running `./makeNrun.sh` is optional, you can also copy the inside of the file and paste everything except line 15)
+```
+cd '/mnt/c/Users/[your name]/Documents/GitHub/killmeOS/build'
+./makeNrun.sh
+```
+18. Open ```nasmpath.bat``` (can be found here: ```C:\Program Files\NASM```)
+```
+cd C:\Users\[your name]\Documents\GitHub\killmeOS\build
+qemu-system-i386 -drive format=raw,file="OS.bin",index=0,if=floppy -m 128M
+```
+19. If you've done everthing correctly, You should see QEMU instance running killmeOS!! Also make sure to join our [discord server](http://discord.gg/cTumjQQkUp) >:3
