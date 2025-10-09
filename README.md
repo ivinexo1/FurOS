@@ -11,7 +11,7 @@
 </div>
 
 <div align="center" dir="auto">
-  <img width="640" height="360" alt="image" src="https://github.com/user-attachments/assets/072e0721-a3fa-4b5e-a628-1a60e1012763" />
+  <img width="640" height="360" alt="image" src="https://github.com/user-attachments/assets/11f54dd8-7cf2-4637-82d3-2197b18473ec" />
 </div>
 
 # How to setup!!
