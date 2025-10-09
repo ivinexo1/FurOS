@@ -8,6 +8,8 @@ void printPixel(uint32_t, uint32_t, uint32_t);
 
 int putChar(uint32_t, uint32_t, uint32_t, uint32_t, uint8_t);
 
+void printSprite(uint32_t, uint32_t);
+
 /*size_t strlen(const char*);
 
 void enable_cursor(uint8_t, uint8_t);

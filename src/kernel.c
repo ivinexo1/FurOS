@@ -32,9 +32,14 @@ void main() {
     }
   }
 //  putChar(0, 0, 0xff00ff, 0x0000ff, 'a');
-//  printString("SHELL ");
-  initAcpi();
+  printString("FurOS\nSHELL ");
+  //initAcpi();
   init_keyboard();
+  for(int i = 0; i < 5; i++) {
+    for(int j = 0; j < 5; j++) {
+      printSprite(i*200, j*200);
+    }
+  }
 //  asm volatile("int $31");
 //  int x = 1/0;
 

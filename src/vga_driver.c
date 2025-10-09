@@ -2,6 +2,7 @@
 #include "../include/string.h"
 //#include "../include/ports.h"
 #include "./font.c"
+#include "./sprite.c"
 #include <stdint.h>
 #include <stddef.h>
 #include <stdbool.h>
@@ -53,6 +54,13 @@ int putChar(uint32_t x, uint32_t y, uint32_t fgcolor, uint32_t bgcolor, uint8_t 
   return 0;
 }
 
+void printSprite(uint32_t x, uint32_t y) {
+  for(int i = 0; i < SPRITE_WIDTH; i++) {
+    for(int j = 0; j < SPRITE_HEIGHT; j++) {
+      printPixel(x+i, y+j, sprite_data[0][j * SPRITE_WIDTH + i]);
+    }
+  }
+}
 
 /*
 
