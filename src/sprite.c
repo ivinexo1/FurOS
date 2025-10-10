@@ -4,8 +4,8 @@
 #define SPRITE_WIDTH 128
 #define SPRITE_HEIGHT 128
 
-// convert here
-// https://notisrac.github.io/FileToCArray/
+// forgor to write this here :facepalm:
+// replace 0xff with 0x when converting img !!
 
 static const uint32_t sprite_data[1][16384] = {
 {
