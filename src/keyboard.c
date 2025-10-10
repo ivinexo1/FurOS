@@ -3,7 +3,7 @@
 #include "../include/isr.h"
 #include "../include/vga.h"
 #include "../include/terminal.h"
-//#include "../include/shell.h"
+#include "../include/shell.h"
 
 char keybuffer[MAX_SIZE];
 int shift_pressed = 0; // 0 - shift not pressed, 32 - shift pressed
@@ -150,14 +150,9 @@ void print_letter(uint8_t scancode) {
           break;
         case 0x1C:
           // ENTER
-          printChar('\n'); // <-- mozno toto bude better ale nechce mi zase fungovat ./makeNrun.sh vo WSL
-//          parsedShell();
-          //printString("SHELL> ");
-          //printChar('S');
-          //printChar('H');
-          //printChar('E');
-          //printChar('L');
-          //printChar('L');
+          printChar('\n');
+          //if(keybuffer[0] != 0) { parsedShell(); }
+          printString("SHELL> ");
           for(int x = 0; x < MAX_SIZE; x++) keybuffer[x] = 0;
           keybuff_pointer = 0;
           break;

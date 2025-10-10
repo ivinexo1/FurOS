@@ -26,3 +26,11 @@ int strcmpBySize(uint8_t* str1, uint8_t* str2, int len) {
   }
   return 1;
 }
+
+int strcmp2(const char *str1, const char *str2) {
+    while (*str1 != '\0' && *str1 == *str2) {
+        str1++;
+        str2++;
+    }
+    return (int)(*str1) - (int)(*str2);
+}

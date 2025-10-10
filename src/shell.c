@@ -4,12 +4,16 @@
 #include <stddef.h>
 #include <stdbool.h>
 #include "../include/keyboard.h"
+#include "../include/string.h" // nemame standard lib
 
 int parsedShell() {
     int wlength = 0;
     char word[256];
     int words_count = 0;
-    char *words[256];
+    char* words[256];
+    char command[256];
+    char letter[256];
+    for(int i = 0; i < 256; i++) { letter[i] = keybuffer[i]; }
     // find length of the word [until whitespace]
     while (keybuffer[wlength] == ' ' || keybuffer[wlength] == '\n' || keybuffer[wlength] == '\0' || keybuffer[wlength] == '\t') {
         wlength++;
@@ -41,5 +45,25 @@ int parsedShell() {
         }
     }
 
-    printString(words[1]);
+    if (strcmp2(words[0], "sys") == 0) {
+        if (strcmp2(words[1], "help") == 0) {
+            printString("Available commands:\n");
+            printString(" sys\n");
+            printString("    help\n");
+            printString("    echo\n");
+            printString("    clear\n"); // (not implemented)
+            printString("    shutdown\n"); // (not implemented)
+            printString("    debug\n\n"); // (not implemented)
+        }
+        if (strcmp2(words[1], "echo") == 0) {
+            for(int i = 2; i < words_count; i++) {
+                printString(words[i]);
+                if (i < words_count - 1) {
+                    printString(" ");
+                }
+            }
+            printString("\n");
+        }
+    }
+    return 0;
 }
