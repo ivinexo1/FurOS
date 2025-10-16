@@ -11,6 +11,7 @@ for(int i = 0; i < 1024; i++) {
     if (src[i] == ' ' || src[i] == '\0') {
         letter[i] = '\0'; // end of token
         word[j] = letter;
+        j += 1;
         break;
     }
     letter[i] = src[i];
