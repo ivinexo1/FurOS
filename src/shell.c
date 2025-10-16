@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include "../include/keyboard.h"
 #include "../include/string.h" // nemame standard lib
+// #include "../include/hwehCompiler.h"
 
 int parsedShell() {
     int wlength = 0;
