@@ -2,6 +2,13 @@
 #include "../include/acpi.h"
 #include "../include/terminal.h"
 #include "../include/string.h"
+#include "../include/ports.h"
+
+
+
+uint16_t SLP_TYPa;
+uint16_t SLP_TYPb;
+uint16_t SLP_EN = 1<<13;
 
 
 int RsdpChecksum(struct RSDP_t* rsdp) {
@@ -48,33 +55,69 @@ int SDTChecksum(struct ACPISDTHeader* ptr) {
   return 1;
 }
 
-struct ACPISDTHeader* findFADT(struct ACPISDTHeader* header){
-  uint32_t entries = ((header->Length) - sizeof(header));
-  struct ACPISDTHeader* base = (struct ACPISDTHeader*)(header->rest);
+struct FADT* findFADT(struct RSDT* header){
+  uint32_t entries = ((header->h.Length) - sizeof(header));
+  struct FADT* base = (struct FADT*)(header->rest);
   for (int i = 0; i < entries; i++) {
-    if (strcmpBySize((base + i)->Signature, "FACP", 4)) {
-      return (base + i);
+    if (strcmpBySize((base + i)->h.Signature, "FACP", 4)) {
+      if (SDTChecksum(&((base + i)->h)) == 0) {
+        return (base + i);
+      }
     }
   }
   return NULL;
 }
 
+
+uint8_t* findS5(struct DSDT* dsdt) {
+  uint8_t* S5Addr = (uint8_t *) (dsdt + 36); // skip header
+	int dsdtLength = (dsdt->h.Length) -36;
+  for (int i = 0; i < dsdtLength; i++) {
+    if (strcmpBySize(S5Addr, "_S5_", 4)) {
+      return S5Addr;
+    }
+    S5Addr++;
+  }
+  return NULL;
+}
+
+
 int initAcpi() {
   struct RSDP_t* rsdp = findRSDP();
-//  for (int i = 0; i < 5; i++) {
-//    printChar((rsdp->Signature)[i]);
-//  }
-  struct ACPISDTHeader* rsdt = (struct ACPISDTHeader*)(rsdp->RsdtAddress);
+
+  struct RSDT* rsdt = (struct RSDT*)(rsdp->RsdtAddress);
   for (int i = 0; i < 4; i++) {
-    printChar((rsdt->Signature)[i]);
+    printChar((rsdt->h.Signature)[i]);
   }
-  struct ACPISDTHeader* fadt = findFADT(rsdt);
+  struct FADT* fadt = findFADT(rsdt);
   if (fadt == NULL) {
     printString("Fuck");
   }
   for (int i = 0; i < 4; i++) {
-    printChar((fadt->Signature)[i]);
+    printChar((fadt->h.Signature)[i]);
   }
+  printChar('\n');
+  struct DSDT* dsdt = (struct DSDT*)fadt->Dsdt;
+  for (int i = 0; i < 4; i++) {
+    printChar(((uint8_t*)(dsdt->h.Signature))[i]);
+  }
+  uint8_t* S5 = findS5(dsdt);
+  if (S5 != NULL) {
+    printString("Nice");
+  } else {
+    printString("Not Good");
+  }
+  printChar('\n');
+  printChar((uint32_t)*(S5 + 1));
+  printChar((uint32_t)*(S5 + 2)); 
+//  outb(fadt->SMI_CommandPort, fadt->AcpiEnable);
+  if (inw((unsigned int) fadt->PM1aControlBlock) == 0) {
+    printString("\nACPI enabled\n");
+  } else {
+    printString("ACPI disabled\n");
+  }
+//  outw(fadt->PM1aControlBlock, *(S5 + 5) | 0x2000);
+//  outw(fadt->PM1bControlBlock, *(S5 + 7) | 0x2000);
   return 0;
 }
 

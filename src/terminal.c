@@ -53,13 +53,19 @@ int printChar(uint8_t letter){
 int printNum(uint32_t num) {
   uint8_t ch[10];
   uint32_t divisor = 10;
+  bool notZero = false;
 
   for (int i = 0; i < 10; i++) {
     ch[i] = (uint8_t) (num % divisor) + 48;
     num /= 10;
   }
   for (int i = 9; i >= 0; i--) {
-    printChar(ch[i]);
+    if (ch[i] != '0' || i == 0) {
+      notZero = true;
+    }
+    if (notZero == true) {
+      printChar(ch[i]);
+    }
   }
   return 0;
 }
