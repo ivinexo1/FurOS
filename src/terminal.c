@@ -70,6 +70,31 @@ int printNum(uint32_t num) {
   return 0;
 }
 
+int printHex(uint32_t num) {
+  uint8_t ch[10];
+  uint32_t divisor = 16;
+  bool notZero = false;
+
+  for (int i = 0; i < 10; i++) {
+    ch[i] = (uint8_t) (num % divisor);
+    if (ch[i] < 10) {
+      ch[i] += 48;
+    } else {
+      ch[i] += 65;
+    }
+    num /= 16;
+  }
+  for (int i = 9; i >= 0; i--) {
+    if (ch[i] != '0' || i == 0) {
+      notZero = true;
+    }
+    if (notZero == true) {
+      printChar(ch[i]);
+    }
+  }
+  return 0;
+}
+
 int printString(char* string) {
   for (int i = 0; i < strlen(string); i++) {
     printChar(string[i]);
