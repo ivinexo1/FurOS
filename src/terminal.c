@@ -80,7 +80,7 @@ int printHex(uint32_t num) {
     if (ch[i] < 10) {
       ch[i] += 48;
     } else {
-      ch[i] += 65;
+      ch[i] += 55;
     }
     num /= 16;
   }

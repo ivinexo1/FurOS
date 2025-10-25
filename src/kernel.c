@@ -8,6 +8,9 @@
 #include "../include/terminal.h"
 #include "../include/keyboard.h"
 #include "../include/pci.h"
+#include "../include/paging.h"
+
+extern uint32_t framebuffer;
 
 void main() {
 /*  for (int i = 0; i < 0x1000 * 576; i++) {
@@ -39,6 +42,7 @@ void main() {
   for ( int i = 0; i < 7; i++) {
     pciCheckFunc(0, i);
   }
+  initPaging();
 //  for(int i = 0; i < 5; i++) {
 //    for(int j = 0; j < 5; j++) {
 //      printSprite(i*200, j*200);
