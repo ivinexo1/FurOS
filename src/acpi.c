@@ -84,35 +84,53 @@ uint8_t* findS5(struct DSDT* dsdt) {
 
 int initAcpi() {
   struct RSDP_t* rsdp = findRSDP();
+  if (rsdp != NULL) {
+    printString("Found RSDP\n");
+  } else {
+    return -1;
+  }
 
   struct RSDT* rsdt = (struct RSDT*)(rsdp->RsdtAddress);
+  if (rsdt != NULL) {
+    printString("Found ");
+  } else {
+    return -1;
+  }
   for (int i = 0; i < 4; i++) {
     printChar((rsdt->h.Signature)[i]);
   }
+  printChar('\n');
+
   struct FADT* fadt = findFADT(rsdt);
-  if (fadt == NULL) {
-    printString("Fuck");
+  if (fadt != NULL) {
+    printString("Found ");
+  }else {
+    return -1;
   }
   for (int i = 0; i < 4; i++) {
     printChar((fadt->h.Signature)[i]);
   }
   printChar('\n');
   struct DSDT* dsdt = (struct DSDT*)fadt->Dsdt;
+  if (dsdt != NULL) {
+    printString("Found ");
+  } else {
+    return -1;
+  }
   for (int i = 0; i < 4; i++) {
     printChar(((uint8_t*)(dsdt->h.Signature))[i]);
   }
+  printChar('\n');
   uint8_t* S5 = findS5(dsdt);
   if (S5 != NULL) {
-    printString("Nice");
+    printString("Found S5");
   } else {
-    printString("Not Good");
+    return -1;
   }
   printChar('\n');
-  printChar((uint32_t)*(S5 + 1));
-  printChar((uint32_t)*(S5 + 2)); 
 //  outb(fadt->SMI_CommandPort, fadt->AcpiEnable);
   if (inw((unsigned int) fadt->PM1aControlBlock) == 0) {
-    printString("\nACPI enabled\n");
+    printString("ACPI enabled\n");
   } else {
     printString("ACPI disabled\n");
   }
