@@ -10,6 +10,11 @@ uint16_t SLP_TYPa;
 uint16_t SLP_TYPb;
 uint16_t SLP_EN = 1<<13;
 
+uint16_t S5a;
+uint16_t S5b;
+uint32_t PM1a_CNT;
+uint32_t PM1b_CNT;
+
 
 int RsdpChecksum(struct RSDP_t* rsdp) {
   uint8_t* ptr = (uint8_t*)rsdp;
@@ -134,9 +139,17 @@ int initAcpi() {
   } else {
     printString("ACPI disabled\n");
   }
+  PM1a_CNT = fadt->PM1aControlBlock;
+  PM1b_CNT = fadt->PM1bControlBlock;
+  S5a = *(S5 + 5);
+  S5b = *(S5 + 7);
 //  outw(fadt->PM1aControlBlock, *(S5 + 5) | 0x2000);
 //  outw(fadt->PM1bControlBlock, *(S5 + 7) | 0x2000);
   return 0;
 }
 
-
+int shutdown(){
+  outw(PM1a_CNT, S5a | 0x2000); 
+  outw(PM1b_CNT, S5b | 0x2000); 
+  return 0;
+}

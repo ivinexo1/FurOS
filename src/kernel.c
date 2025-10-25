@@ -37,6 +37,7 @@ void main() {
   init_keyboard();
 
   printString("FurOS\nSHELL ");
+ //  shutdown();
  
 //  for(int i = 0; i < 5; i++) {
 //    for(int j = 0; j < 5; j++) {

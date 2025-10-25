@@ -107,3 +107,4 @@ struct DSDT {
 
 struct RSDP_t* findRSDP();
 int initAcpi();
+int shutdown();
