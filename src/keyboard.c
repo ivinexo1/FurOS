@@ -4,6 +4,7 @@
 #include "../include/vga.h"
 #include "../include/terminal.h"
 #include "../include/shell.h"
+#include "../include/acpi.h"
 
 char keybuffer[MAX_SIZE];
 int shift_pressed = 0; // 0 - shift not pressed, 32 - shift pressed
@@ -16,6 +17,7 @@ void print_letter(uint8_t scancode) {
           break;
         case 0x1:
           // ESC
+          shutdown();
           break;
         case 0x2:
           printChar(shift_pressed ? '!' : '1');

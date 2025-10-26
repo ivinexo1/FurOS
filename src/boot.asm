@@ -1,4 +1,6 @@
 [org 0x7c00]
+KERNEL_LOC equ 0x20000
+KERNEL_SIZE equ 80
 mov [BOOT_DISK], dl ;saving current disk number
 
 ;setting up registers
@@ -12,62 +14,27 @@ mov ah, 0
 mov al, 0x3
 int 0x10
 
-;mov eax, 0x2000
-;mov es, eax
-;mov di, 0
-;
-;mov eax, 0xe820
-;mov ebx, 0
-;mov ecx, 24
-;mov edx, 0x534d4150
-;int 0x15
-;jc error
-;
-;mov ecx, 20
-;scanRAM:
-;push ecx
-;add di, 24
-;mov eax, 0xe820
-;mov ecx, 24
-;int 0x15
-;jc error
-;pop ecx
-;loop scanRAM
-;
-;
-;
-;mov ax, 0x2000
-;mov es, ax
-;xor bx, bx
-;mov cx, 80
-;ReadLoop:
-;push cx
-;push bx
-;push bp
-;mov bp, sp
-;push word [es:bx]
-;sub sp, 2
-;call hexdump
-;mov sp, bp
-;pop bp
-;pop bx
-;add bx, 2
-;xor dx, dx
-;mov ax, bx
-;mov cx, 4
-;div cx
-;cmp dx, 0
-;je .space
-;.ret:
-;pop cx
-;loop ReadLoop
-;jmp $
 
-;.space:
-;mov ah, 0xe
-;mov al, ' '
-;int 0x10
-;jmp .ret
+mov eax, 0x1000
+mov es, eax
+xor di, di
+mov ecx, 5
+xor ebx, ebx
+scanRam:
+mov ecx, 20
+mov eax, 0xe820
+mov edx, 0x0534D4150
+int 0x15
+jc error
+cmp ebx, 0
+jz .end
+add di, 20
+jmp scanRam
+.end:
+
+mov ah, 0xe
+mov al, 'c'
+int 0x10
 
 mov ah, 0x0
 int 0x16
@@ -86,11 +53,14 @@ mov dl, [BOOT_DISK]
 int 0x13
 jc error
 
+mov ax, KERNEL_SIZE
+mov bx, 8
+mul bx
+mov cx, ax
 ;loading the kernel
 push 0x0000
-push 0x3000
+push 0x2000
 push 3
-mov cx, 650
 loadloop:
 push cx
 
@@ -278,7 +248,11 @@ and eax, 0x0000ffff
 push eax
 mov eax, [VesaModeInfoBlock.LFBAddress]
 push eax
-jmp 0x30000
+mov eax, KERNEL_LOC
+push eax
+mov eax, KERNEL_SIZE
+push eax
+jmp 0x20000
 times 512-(($-$$)-512) db 0
 
 GDT_start:                          ; must be at the end of real mode code

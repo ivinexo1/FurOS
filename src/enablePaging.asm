@@ -1,7 +1,9 @@
 global enablePaging
+extern kernel_size
+extern kernel_loc
 
 enablePaging:
-mov eax, 0x7000000
+mov eax, 0x100000
 mov cr3, eax
 
 mov eax, cr0
