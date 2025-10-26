@@ -16,7 +16,7 @@ extern uint32_t bbl;
 void main() {
   for (int y = 0; y < 768; y++) {
     for (int x = 0; x < 1024; x++) {
-      printPixel(x, y, 0x0000ff);
+      printPixel(x, y, 0x0000ff); // farba co nevypaluje oci by bola nice
     }
   }
 
