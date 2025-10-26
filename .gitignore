@@ -1,3 +1,11 @@
 .vscode
 \
 drive.img
+OS.bin
+build/binfiles/everything.bin                                                                                                                                       
+build/binfiles/full_kernel.bin                                                                                                                                      
+build/objfiles/font.o                                                                                                                                               
+build/objfiles/kernel.o                                                                                                                                             
+build/objfiles/keyboard.o                                                                                                                                           
+build/objfiles/pci.o                                                                                                                                                
+build/objfiles/vga_driver.o 

@@ -26,11 +26,11 @@ int mapPhytoVirt(uint32_t phy, uint32_t virt, bool cache){
 }
 
 int demapPage(uint32_t virt) {
-  uint32_t* pPT = pPD[virt >> 22] & 0xfffff000;
+  uint32_t* pPT = (uint32_t*)(pPD[virt >> 22] & 0xfffff000);
   uint32_t phy = pPT[(virt >> 12) & 0x3ff] & 0xfffff000;
   pPT[(virt >> 12) & 0x3ff] = 0;
   if (phy <= 0x8000000) {
-    pPB[phy >> 15] &= 0xff ^ (1 << ((phy >> 12) & 0b111))
+    pPB[phy >> 15] &= 0xff ^ (1 << ((phy >> 12) & 0b111));
   }
   return 0;
 }
