@@ -10,6 +10,8 @@
 #include "../include/pci.h"
 #include "../include/paging.h"
 
+extern uint32_t kernel_loc;
+extern uint32_t kernel_size;
 extern uint32_t framebuffer;
 extern uint32_t bbl;
 
@@ -36,8 +38,9 @@ void main() {
   printString("5. Initalising keyboard\n");
   init_keyboard();
 
-  printString("FurOS\nSHELL ");
- //  shutdown();
+//  printNum(bus0[4].BAR5);
+
+  printString("\nFurOS\nSHELL ");
  
 //  for(int i = 0; i < 5; i++) {
 //    for(int j = 0; j < 5; j++) {

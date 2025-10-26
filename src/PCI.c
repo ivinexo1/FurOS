@@ -10,7 +10,7 @@ uint32_t pciReadConfigDWord(uint8_t bus, uint8_t slot, uint8_t func, uint8_t off
     uint32_t lbus  = (uint32_t)bus;
     uint32_t lslot = (uint32_t)slot;
     uint32_t lfunc = (uint32_t)func;
-    uint16_t tmp = 0;
+    uint32_t tmp = 0;
   
     // Create configuration address as per Figure 1
     address = (uint32_t)((lbus << 16) | (lslot << 11) |
@@ -46,7 +46,7 @@ uint8_t pciReadConfigByte(uint8_t bus, uint8_t slot, uint8_t func, uint8_t offse
     uint32_t lbus  = (uint32_t)bus;
     uint32_t lslot = (uint32_t)slot;
     uint32_t lfunc = (uint32_t)func;
-    uint16_t tmp = 0;
+    uint8_t tmp = 0;
   
     // Create configuration address as per Figure 1
     address = (uint32_t)((lbus << 16) | (lslot << 11) |

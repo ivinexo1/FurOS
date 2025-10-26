@@ -14,7 +14,7 @@ i386-elf-gcc -ffreestanding -m32 -g -c ../src/paging.c -o ./objfiles/paging.o
 nasm ../src/isrhandler.asm -f elf -o ./objfiles/isrhandler.o
 nasm ../src/enablePaging.asm -f elf -o ./objfiles/enablePaging.o
 nasm ../src/kernel_entry.asm -f elf -o ./objfiles/kernel_entry.o
-i386-elf-ld -o ./binfiles/full_kernel.bin -Ttext 0x30000 ./objfiles/kernel_entry.o ./objfiles/kernel.o ./objfiles/vga_driver.o ./objfiles/string.o ./objfiles/ports.o ./objfiles/idt.o ./objfiles/isr.o ./objfiles/isrhandler.o ./objfiles/acpi.o ./objfiles/pci.o ./objfiles/paging.o ./objfiles/enablePaging.o ./objfiles/terminal.o ./objfiles/keyboard.o ./objfiles/font.o --oformat binary
+i386-elf-ld -o ./binfiles/full_kernel.bin -Ttext 0x20000 ./objfiles/kernel_entry.o ./objfiles/kernel.o ./objfiles/vga_driver.o ./objfiles/string.o ./objfiles/ports.o ./objfiles/idt.o ./objfiles/isr.o ./objfiles/isrhandler.o ./objfiles/acpi.o ./objfiles/pci.o ./objfiles/paging.o ./objfiles/enablePaging.o ./objfiles/terminal.o ./objfiles/keyboard.o ./objfiles/font.o --oformat binary
 nasm ../src/boot.asm -f bin -o ./binfiles/boot.bin
 cat ./binfiles/boot.bin ./binfiles/full_kernel.bin >./binfiles/everything.bin
 cat ./binfiles/everything.bin zeroes.bin >OS.bin

@@ -1,0 +1,3 @@
+
+void* malloc(uint32_t size) {
+}
