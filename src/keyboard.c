@@ -3,8 +3,8 @@
 #include "../include/isr.h"
 #include "../include/vga.h"
 #include "../include/terminal.h"
-#include "../include/shell.h"
 #include "../include/acpi.h"
+// #include "../include/shell.h"
 
 char keybuffer[MAX_SIZE];
 int shift_pressed = 0; // 0 - shift not pressed, 32 - shift pressed
@@ -153,7 +153,7 @@ void print_letter(uint8_t scancode) {
         case 0x1C:
           // ENTER
           printChar('\n');
-          // if(keybuffer[0] != 0) { parsedShell(); }
+          if(keybuffer[0] != 0) {  } // ze vraj undefined reference to `shell'
           printString("SHELL> ");
           for(int x = 0; x < MAX_SIZE; x++) keybuffer[x] = 0;
           keybuff_pointer = 0;
