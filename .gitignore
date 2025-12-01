@@ -9,3 +9,4 @@ build\objfiles\kernel.o
 build\objfiles\keyboard.o
 build\objfiles\pci.o
 build\objfiles\vga_driver.o
+build\objfiles\mouseDriver.o

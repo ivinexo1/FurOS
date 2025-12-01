@@ -67,4 +67,11 @@ void shell() {
             printString("\n");
         }
     }
+    if(strcmp2(words[0], "debug") == 0) {
+        if(strcmp2(words[1], "mouse") == 0) {
+            // render image as background and show mouse
+            // + refresh screen maybe 30 or 60hz
+            printString("mouse debug\n");
+        }
+    } 
 }
