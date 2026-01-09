@@ -9,6 +9,7 @@
 #include "../include/keyboard.h"
 #include "../include/pci.h"
 #include "../include/paging.h"
+#include "../include/mouseDriver.h"
 
 extern uint32_t kernel_loc;
 extern uint32_t kernel_size;
@@ -37,6 +38,9 @@ void main() {
 
   printString("5. Initalising keyboard\n");
   init_keyboard();
+
+  printString("6. Initalising mouse\n");
+  init_mouse();
 
 //  printNum(bus0[4].BAR5);
 

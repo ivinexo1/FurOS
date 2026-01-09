@@ -1,6 +1,8 @@
 #include <stdint.h>
 #include "../include/mouseDriver.h"
 #include "../include/ports.h"
+#include "../include/isr.h"
+#include "../include/idt.h"
 
 uint8_t mouse_buttons = 0;
 static uint8_t mouse_packet[3];
@@ -43,7 +45,7 @@ static void parse_mouse_packet(uint8_t p[3]) {
     mouse_buttons = p[0] & 0x07; // middle, right, left
 }
 
-void handle_mouse(void) {
+void mouse_callback(registers_t *regs) {
     uint8_t status = inb(0x64);
     if (!(status & 0x01)) return;   // no data available
     if (!(status & 0x20)) return;   // not from mouse (AUX)
@@ -54,4 +56,8 @@ void handle_mouse(void) {
         mouse_packet_idx = 0;
         parse_mouse_packet(mouse_packet);
     }
+}
+
+void init_mouse() {
+    register_interrupt_handler(IRQ12, mouse_callback);
 }

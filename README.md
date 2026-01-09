@@ -73,14 +73,14 @@ sudo mount -o remount,size=6G /tmp
 14. Before you install i386-elf-gcc just know that WSL is going to be using like 90% of your CPU
 15. ```yay i386-elf-gcc``` and enter 1 (for the other options just press enter)
 16. Once it's done check ```i386-elf-gcc -v```
-17. If it's installed navigate to killmeOS (running `./makeNrun.sh` is optional, you can also copy the inside of the file and paste everything except line 15)
+17. If it's installed navigate to FurOS (running `./makeNrun.sh` is optional, you can also copy the inside of the file and paste everything except line 15)
 ```
 cd '/mnt/c/Users/[your name]/Documents/GitHub/FurOS/build'
 ./makeNrun.sh
 ```
 18. Open ```nasmpath.bat``` (can be found here: ```C:\Program Files\NASM```)
 ```
-cd C:\Users\[your name]\Documents\GitHub\killmeOS\build
+cd C:\Users\[your name]\Documents\GitHub\FurOS\build
 qemu-system-i386 -drive format=raw,file="OS.bin",index=0,if=floppy -m 128M
 ```
-19. If you've done everthing correctly, You should see QEMU instance running killmeOS!! Also make sure to join our [discord server](http://discord.gg/cTumjQQkUp) >:3
+19. If you've done everthing correctly, You should see QEMU instance running FurOS!! Also make sure to join our [discord server](http://discord.gg/cTumjQQkUp) >:3
