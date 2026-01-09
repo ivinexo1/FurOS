@@ -20,12 +20,14 @@ int mouseY = 0;
 // 3 = Y movement
 // 4 = optional
 
+// p == packet of 3 bytes
 static void parse_mouse_packet(uint8_t p[3]) {
     if (p[0] & 0x10) {
         // 11000000 = XY overflow
         return;
     }
 
+    // delta xy
     int8_t dx = (int8_t)p[1];
     int8_t dy = (int8_t)p[2];
 
@@ -38,12 +40,12 @@ static void parse_mouse_packet(uint8_t p[3]) {
     if (mouseX > 1024) mouseX = 1024;
     if (mouseY > 768) mouseY = 768;
 
-    mouse_buttons = p[0] & 0x07;
+    mouse_buttons = p[0] & 0x07; // middle, right, left
 }
 
 void handle_mouse(void) {
     uint8_t status = inb(0x64);
-    if (!(status & 0x01)) return;   // no data
+    if (!(status & 0x01)) return;   // no data available
     if (!(status & 0x20)) return;   // not from mouse (AUX)
 
     uint8_t b = inb(0x60);
@@ -53,7 +55,3 @@ void handle_mouse(void) {
         parse_mouse_packet(mouse_packet);
     }
 }
-
-int get_mouse_x(void) { return mouseX; }
-int get_mouse_y(void) { return mouseY; }
-uint8_t get_mouse_buttons(void) { return mouse_buttons; }
