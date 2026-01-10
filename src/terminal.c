@@ -5,8 +5,8 @@
 
 uint32_t current_X = 0;
 uint32_t current_Y = 0;
-uint32_t fgcolor = 0xffffff;
-uint32_t bgcolor = 0x0000ff;
+uint32_t fgcolor = 0xe0e2e4;
+uint32_t bgcolor = 0x282b2e;
 uint8_t buffer[475];
 
 int resetTerminal(){
