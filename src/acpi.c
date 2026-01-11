@@ -90,54 +90,40 @@ uint8_t* findS5(struct DSDT* dsdt) {
 int initAcpi() {
   struct RSDP_t* rsdp = findRSDP();
   if (rsdp != NULL) {
-    printString("Found RSDP\n");
   } else {
     return -1;
   }
 
   struct RSDT* rsdt = (struct RSDT*)(rsdp->RsdtAddress);
   if (rsdt != NULL) {
-    printString("Found ");
   } else {
     return -1;
   }
   for (int i = 0; i < 4; i++) {
-    printChar((rsdt->h.Signature)[i]);
   }
-  printChar('\n');
 
   struct FADT* fadt = findFADT(rsdt);
   if (fadt != NULL) {
-    printString("Found ");
   }else {
     return -1;
   }
   for (int i = 0; i < 4; i++) {
-    printChar((fadt->h.Signature)[i]);
   }
-  printChar('\n');
   struct DSDT* dsdt = (struct DSDT*)fadt->Dsdt;
   if (dsdt != NULL) {
-    printString("Found ");
   } else {
     return -1;
   }
   for (int i = 0; i < 4; i++) {
-    printChar(((uint8_t*)(dsdt->h.Signature))[i]);
   }
-  printChar('\n');
   uint8_t* S5 = findS5(dsdt);
   if (S5 != NULL) {
-    printString("Found S5");
   } else {
     return -1;
   }
-  printChar('\n');
 //  outb(fadt->SMI_CommandPort, fadt->AcpiEnable);
   if (inw((unsigned int) fadt->PM1aControlBlock) == 0) {
-    printString("ACPI enabled\n");
   } else {
-    printString("ACPI disabled\n");
   }
   PM1a_CNT = fadt->PM1aControlBlock;
   PM1b_CNT = fadt->PM1bControlBlock;

@@ -2,6 +2,7 @@
 #include "../include/paging.h"
 
 extern void enablePaging();
+extern void reloadPaging();
 
 extern uint32_t kernel_loc;
 extern uint32_t kernel_size;
@@ -26,12 +27,16 @@ int mapPhytoVirt(uint32_t phy, uint32_t virt, bool cache){
 }
 
 int demapPage(uint32_t virt) {
-  uint32_t* pPT = (uint32_t*)(pPD[virt >> 22] & 0xfffff000);
-  uint32_t phy = pPT[(virt >> 12) & 0x3ff] & 0xfffff000;
-  pPT[(virt >> 12) & 0x3ff] = 0;
+  uint32_t direntry = (virt >> 22) & 0x3ff;
+  uint32_t pageentry = (virt >> 12) & 0x3ff;
+  uint32_t* pPT = (uint32_t*) ((direntry + 1) * 4096 + (uint32_t)pPD);
+  pPD[direntry] = (uint32_t)pPT & 0xfffff000 | 0xf;
+  pPT[pageentry] &= 0xfffffffe;
+  uint32_t phy = pPT[pageentry] & 0xfffff000;
   if (phy <= 0x8000000) {
-    pPB[phy >> 15] &= 0xff ^ (1 << ((phy >> 12) & 0b111));
+    pPB[phy >> 15] &= ~(uint8_t)(1 << ((phy >> 12) & 0b111));
   }
+  reloadPaging();
   return 0;
 }
 
