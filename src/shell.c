@@ -1,6 +1,7 @@
 #include "../include/shell.h"
 #include "../include/vga.h"
 #include "../include/ports.h"
+#include "../include/acpi.h"
 #include <stdint.h>
 #include <stddef.h>
 #include <stdbool.h>
@@ -57,8 +58,7 @@ void shell() {
             printString("    clear\n"); // (not implemented)
             printString("    shutdown\n"); // (not implemented)
             printString("    debug\n\n"); // (not implemented)
-        }
-        if (strcmp2(words[1], "echo") == 0) {
+        } else if (strcmp2(words[1], "echo") == 0) {
             for(int i = 2; i < words_count; i++) {
                 printString(words[i]);
                 if (i < words_count - 1) {
@@ -66,9 +66,10 @@ void shell() {
                 }
             }
             printString("\n");
-        }
-        if (strcmp2(words[1], "mouse") == 0) {
+        } else if (strcmp2(words[1], "mouse") == 0) {
             //
+        } else if (strcmp2(words[1], "shutdown") == 0){
+          shutdown();
         }
     } 
 }

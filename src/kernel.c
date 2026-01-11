@@ -55,6 +55,12 @@ void main() {
 //  int x = 1/0;
 
 //  asm volatile("cli");
+  mapPhytoVirt(0x50000, 0x60000, 0);
+  *((uint8_t*)0x60000) = 0xab;
+  printHex(*((uint8_t*)0x60000));
+  demapPage(0x60000);
+
+  *((uint8_t*)0x50000) = 0xab;
 
   return;
 
