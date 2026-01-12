@@ -60,99 +60,33 @@ void mouse_callback(registers_t *regs) {
     }
 }
 
+
+//
+//
+
 void init_mouse() {
-  while(inb(0x64) & 2);
-  outb(0x64, 0x20);
-//  while((inb(0x64) & 1) != 1);
-  uint8_t cmq = inb(0x60);
+  //get I8042 configuration
+  while(inb(0x64) & 2); //wait until ready to accept input
+  outb(0x64, 0x20); //send command get configuration
+  uint8_t cmq = inb(0x60); //get configuration byte
 
-  printHex(cmq);
-  printChar(' ');
-  cmq = cmq & (0xff ^ 0x20);
-  cmq = cmq | 2;
-  printHex(cmq);
-  printChar(' ');
+  cmq = cmq & (0xff ^ 0x20); //enable aux ps/2 port clock 
+  cmq = cmq | 2; //enable aux ps/2 port irq12
 
   while(inb(0x64) & 2);
-  outb(0x64, 0x60);
+  outb(0x64, 0x60); // send command accept configuration
   while(inb(0x64) & 2);
-  outb(0x60, cmq);
+  outb(0x60, cmq); // input configuration
 
   while(inb(0x64) & 2);
-  outb(0x64, 0x20);
-//  while((inb(0x64) & 1) != 1);
-  printHex(inb(0x60));
-  printChar('\n');
+  outb(0x64, 0xa8); // enable aux ps/2 port
 
   while(inb(0x64) & 2);
-  outb(0x64, 0xa8);
-
-/*  outb(0x64, 0x20);
-  uint8_t cmq = inb(0x64);
-  cmq = cmq & 0b11101111;
-  cmq = cmq | 0b00000001;
-  printHex(cmq);
-  printChar(' ');*/
-/*  
-  outb(0x64, 0x60);
+  outb(0x64, 0xd4); //send next command to mouse
   while(inb(0x64) & 2);
-  outb(0x60, cmq);
-
-  outb(0x64, 0x20);
-  printHex(inb(0x64));
-
-  printChar('\n');
-
-  outb(0x64, 0xd4);
-  outb(0x60, 0xf2);
-  while (inb(0x60) != 0xfa) {
-  }
-  printHex(inb(0x60));
-  outb(0x64, 0xd4);
-  outb(0x60, 0xf3);
-  while (inb(0x60) != 0xfa) {
-  }
-  outb(0x64, 0xd4);
-  outb(0x60, 200);
-  while (inb(0x60) != 0xfa) {
-  }
-  printString("Set sample rate to 200\n");
-  outb(0x64, 0xd4);
-  outb(0x60, 0xf3);
-  while (inb(0x60) != 0xfa) {
-  }
-  outb(0x64, 0xd4);
-  outb(0x60, 100);
-  while (inb(0x60) != 0xfa) {
-  }
-  printString("Set sample rate to 100\n");
-  outb(0x64, 0xd4);
-  outb(0x60, 0xf3);
-  while (inb(0x60) != 0xfa) {
-  }
-  outb(0x64, 0xd4);
-  outb(0x60, 80);
-  while (inb(0x60) != 0xfa) {
-  }
-  printString("Set sample rate to 80\n");
-  outb(0x64, 0xd4);
-  outb(0x60, 0xf2);
-  while (inb(0x60) != 0xfa) {
-  }
-  printHex(inb(0x60));
-*/
-  while(inb(0x64) & 2);
-  outb(0x64, 0xd4);
-  while(inb(0x64) & 2);
-  outb(0x60, 0xf4);
+  outb(0x60, 0xf4); // enable packets
   while((inb(0x64) & 1) != 1);
-  while (inb(0x60) != 0xfa);
-  printString("Enabled packets\n");
+  while (inb(0x60) != 0xfa); // wait for ACK
 
-
- /* while(true) {
-    printHex(inb(0x60));
-    printChar('\n');
-  }*/
   register_interrupt_handler(IRQ12, mouse_callback);
 }
